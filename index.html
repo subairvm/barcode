@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+<style type="text/css">
+body{
+    width: 100%;;
+    padding: 0;
+    background-color: #151313;
+
+}
+h1, h2{
+ text-align: center;
+ padding-top: 50px;
+ color: #fff;
+
+}
+
+input[type=text]{
+    display: block;
+    width: 380px;
+    height: 30px;
+    font-size: 20px;
+}
+
+input[type=number]{
+    display: bloc;
+    width: 380px;
+    height: 30px;
+    margin: 0 auto;
+    font-size: 18px;
+    border: none;
+    padding-top: 5px;
+
+}
+
+textarea{
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 22px;
+    padding-top: 15px;
+}
+label{
+    display: block;
+    width: 380px;
+    margin: 15px auto;
+    color: #fff;
+    font-size: 20px;
+
+}
+.group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.clear{
+    clear: both;
+
+}
+
+#qr{
+    margin: 0px;
+    display: inline;
+}
+
+
+
+
+</style>
+
+
+
+
+</head>
+<body>
+    <h1  class="item-align-centere">Your Text Type Here </h1>
+    <label for="">
+         
+        <textarea placeholder="type yor code" type="text" id="value" cols="30" rows="2">Your Text Type Here</textarea>
+    </label>
+  
+    <label>
+        Size:
+        <input id="size" type="number"value="350">
+    </label>
+
+    <label>
+        Version:
+        <input id="version" type="number" value="10">
+    </label>
+    <h1>Download QR Code</h1>
+    <div class="group">
+
+        <div id="qr"></div>
+    </div>
+
+
+    <script src="src/qrcode.js"></script>
+<script src="dist/qart.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var value = 'https://youtu.be/hMkGgMECAJM';
+        var version = 10;
+        var imageSize = 75 + (version * 12) - 24;
+        var size = "175";
+    
+
+        var self = this;
+
+        $('#image img').width(imageSize);
+
+        function makeQR() {
+            // console.log('Current version:', version)
+            qrcode.qrcode.stringToBytes = qrcode.qrcode.stringToBytesFuncs['UTF-8']
+            var qr = qrcode.qrcode(version, 'H');
+            qr.addData(value);
+            try {
+              qr.make();
+
+            } catch (err) {
+              console.log('Version is low:', version)
+              console.log('Error:', err)
+            }
+            document.getElementById('qr').innerHTML = qr.createImgTag(3);
+        }
+
+        function makeQArt() {
+            new QArt({
+                value: value,
+                imagePath: imagePath,
+                filter: filter,
+                version: version,
+                background: bg,
+                size: size,
+                fillType: fillType
+            }).make(document.getElementById('combine'));
+        }
+
+        function getBase64(file, callback) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                callback(reader.result);
+            };
+        }
+
+        $('#value').keyup(function() {
+            value = $(this).val();
+            makeQR();
+            makeQArt();
+        });
+
+
+        $('#size').keyup(function() {
+            size = $(this).val();
+            makeQArt();
+        });
+
+
+
+        $('#version').bind('keyup change click', function() {
+            console.log($('#version').val());
+            version = $('#version').val();
+            imageSize = 75 + (version * 12) - 24;
+            $('#image img').width(imageSize);
+            makeQR();
+            makeQArt();
+        });
+
+        
+
+        makeQR();
+        makeQArt();
+    });
+</script>
+
+
+</body>
+</html>
+
+
